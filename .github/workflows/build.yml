@@ -4,19 +4,32 @@
 on: 
   # เรียกใช้การดำเนินการนี้เมื่อคุณกดที่ master 
   push: 
-    branches: [ "master" ] 
+    branches: [ "main" ] 
   # เรียกใช้การดำเนินการนี้เมื่อมีการสร้าง PR เทียบกับ master 
   pull_request: 
-    branches: [ "master" ] 
+    branches: [ "main" ] 
 
 jobs: 
   flutter_job: 
 
-    # บนเครื่อง เราสามารถใช้ windows-latest หรือ ubuntu-latest ได้ด้วย
+    # บนเครื่อง เราสามารถใช้ windows-latest หรือ ubuntu-latest ได้เช่นกัน
     # เราเลือก macos-latest เพราะเราจะสร้างสำหรับ iOS ด้วย
-    เรียกใช้บน:  macos-latest 
+    รันบน:  macos-latest 
 
     ขั้นตอน: 
 
       # โคลนโครงการบนเครื่อง
-      -  ใช้:  actions/checkout@v4
+      -  ใช้:  actions/checkout@v4 
+
+      # ติดตั้ง flutter และการอ้างอิงที่เกี่ยวข้องบนเครื่องนี้
+      -  ชื่อ:  การตั้งค่า Flutter 
+        ใช้:  subosito/flutter-action@v2 
+        พร้อมกับ: 
+          channel:  'stable' 
+          # flutter-version: '3.16.8' 
+          # ^ หากคุณต้องการใช้ flutter เวอร์ชันเฉพาะ
+      
+      # ดึงการอ้างอิงของ proj จาก pub 
+      -  ชื่อ:  ติดตั้ง การอ้างอิง
+        เรียกใช้:  flutter  pub  get 
+          # ^ หากคุณต้องการ เพื่อใช้เวอร์ชันเฉพาะของ Flutter
